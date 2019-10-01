@@ -1,0 +1,39 @@
+{
+   "background": {
+      "scripts": [ "background.js" ]
+   },
+   "browser_action": {
+      "default_icon": "icons/icon19.png",
+      "default_title": "New divider"
+   },
+   "commands": {
+      "focus-divider-tab": {
+         "description": "Focus divider tab",
+         "suggested_key": {
+            "default": "Alt+D"
+         }
+      }
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "keyboard_handler.js" ],
+      "matches": [ "http://*/*", "https://*/*" ],
+      "run_at": "document_start"
+   } ],
+   "description": "Manage a ton of tabs with dividers and collapsible groups",
+   "icons": {
+      "128": "icons/icon128.png",
+      "16": "icons/icon16.png",
+      "19": "icons/icon19.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+   },
+   "incognito": "split",
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp2rAIzF+XaOVYYNnNFNgDXm9HpXMVvvlf7jhwT0i8IvbaBNTUPFL1eeU7MhRcLeyR1goGBUZn60YiVnzNpttJ7cTuUJADqr7MqwBWCIVskcaaKuruJhNkgiYJ/6GlDu/v05vpb2+fw8jsrokHCz8UsdEdWcgciDfv46XoN2Th3rYcyC3xm81KnYN1TFNRoBs3Qp3OSTMm2T6lA28KyO3x/nu0evRRzd/sctZXXJsz4kuXr7YWTUVcK6lmagVxtJQTbmQM1Kc/kICHn+Ihpzo8DV6j5+zfps7/mhF3cB6ywi99UBVZv6/JeBxOhG0qnmYKzeUDBtH9kYbmdN5+7Z2pwIDAQAB",
+   "manifest_version": 2,
+   "name": "Divider Tabs",
+   "permissions": [ "tabs", "storage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.1",
+   "web_accessible_resources": [ "js/*.js" ]
+}

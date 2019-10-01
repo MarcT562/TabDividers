@@ -1,0 +1,313 @@
+<!doctype html>
+<html>
+<head>
+<title>Divider</title>
+<link rel='icon'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+<style>
+  * {
+    -webkit-user-select: none;
+  }
+  
+  html {
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  body {
+    position: relative;
+    padding: 24px;
+    background-color: #eee;
+  }
+  
+  #groupbox {
+    width: 700px;
+    margin: 0 auto;
+    padding: 18px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+  }
+  
+  .colorbutton {
+    min-width: 1px !important;
+    height: 36px !important;
+    padding: 4px !important;
+  }
+  
+  #coloricon {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+  
+  #dropbutton {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-left: none;
+    min-width: 1px !important;
+    padding: 19px 4px !important;
+    margin-left: -5px;
+    width: 9px !important;
+    height: 6px !important;
+  }
+  
+  #colorpad {
+    width: 152px;
+    height: 206px;
+    padding: 8px;
+    position: absolute;
+    display: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+  }
+  
+  #colorpad img {
+    cursor: pointer;
+  }
+  
+  input {
+    vertical-align: top;
+    margin-top: 6px;
+    padding: 5px;
+    font-size: 20px;
+    color: #444;
+    border: 1px solid #fff;
+    -webkit-user-select: auto !important;
+  }
+  
+  input:hover {
+    border: 1px solid #ddd;
+  }
+  
+  #newdivider {
+    float: right;
+  }
+  
+  #tabs-list {
+    position: relative;
+    top: 12px;
+    margin-bottom: 12px;
+    line-height: 24px;
+    font-size: 14px;
+    color: #15C;
+  	-webkit-user-select: none;
+  }
+  
+  #tabs-list span {
+    width: 630px;
+    display: inline-block;
+    overflow: hidden;
+	  text-overflow: ellipsis;
+	  vertical-align: middle;
+  }
+
+  #tabs-list.collapsed {
+  	opacity: 0.6;
+  }
+  
+  .tabrow {
+    white-space: nowrap;
+	  overflow: hidden;
+	  cursor: pointer;
+	  -webkit-transition: all 180ms ease-out;
+  	position: relative;
+  }
+  
+  .tabrow:hover {
+  	background-color: #f4f4f4;
+  	text-decoration: underline;
+  }
+  
+  .tabrow.dragging {
+    z-index: 1;
+	  -webkit-transition: none;
+  	background-color: #f4f4f4;
+  }
+  
+  .dragging * {
+    cursor: move !important; // ARGH! this fails, no idea why
+  }
+  
+  .favicon {
+  	margin: 0 5px;
+	vertical-align: middle;
+  }
+
+  .tabrow:hover .close-x {
+    visibility: visible;
+  }
+  
+  .close-x {
+    visibility: hidden;
+  	margin: 3px 5px 0 5px;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    float: right;
+    background: url('images/close_x.png') no-repeat 0 0;
+    opacity: 0.5;
+  }
+  
+  .close-x:hover {
+     background: url('images/close_x_hover.png') no-repeat 0 0;
+     opacity: 1;
+ }
+
+  .dragging .close-x {
+    visibility: hidden !important;
+  }
+  
+  #windows-container {
+    width: 152px;
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    margin-left: 379px;
+  }
+  
+  #windows-list {
+  }
+  
+  .windowbox {
+    width: 180px;
+    margin-bottom: 10px;
+    padding: 14px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    position: relative;
+    line-height: 24px;
+    font-size: 14px;
+    color: #15C;
+  	-webkit-user-select: none;
+  }
+  
+  .windowbox span {
+    display: inline-block;
+    overflow: hidden;
+	  text-overflow: ellipsis;
+	  vertical-align: middle;
+  }
+  
+  .grouprow {
+    white-space: nowrap;
+	  overflow: hidden;
+	  cursor: pointer;
+	  -webkit-transition: all 180ms ease;
+  	position: relative;
+  }
+  
+  .grouprow:hover {
+  	background-color: #f4f4f4;
+  	text-decoration: underline;
+  }
+  
+  
+    
+  .kd-button {
+    display: inline-block;
+    min-width: 54px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #444;
+    font-size: 11px;
+    font-weight: bold;
+    height: 27px;
+    padding: 0 8px;
+    line-height: 27px;
+    border-radius: 2px;
+    -webkit-transition: all 0.218s;
+    background-color: whiteSmoke;
+    background-image: -webkit-linear-gradient(top, #f5f5f5, #f1f1f1);
+    cursor: default;
+  }
+
+  .kd-button:hover {
+    border: 1px solid #c6c6c6;
+    color: #222;
+    -webkit-transition: all 0.0s;
+    background-color: #f8f8f8;
+    background-image: -webkit-linear-gradient(top, #f8f8f8, #f1f1f1);
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);    
+  }
+  
+  .kd-button:active {
+    background-color: #c6c6c6;
+    background-image: -webkit-linear-gradient(top, #f6f6f6, #f1f1f1);
+    box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+</style>
+</head>
+<body>
+<div id='groupbox'>
+  <img id='coloricon' class='kd-button colorbutton' src='icons/e36_0.png'>
+  <img id='dropbutton' class='kd-button' src='images/drop_arrow.png'>
+  <div id='colorpad'>
+    <img id='cb0' class='kd-button colorbutton' src='icons/e36_0.png'>
+    <img id='cb1' class='kd-button colorbutton' src='icons/e36_1.png'>
+    <img id='cb2' class='kd-button colorbutton' src='icons/e36_2.png'>
+    <img id='cb3' class='kd-button colorbutton' src='icons/e36_3.png'>
+    <img id='cb4' class='kd-button colorbutton' src='icons/e36_4.png'>
+    <img id='cb5' class='kd-button colorbutton' src='icons/e36_5.png'>
+    <img id='cb6' class='kd-button colorbutton' src='icons/e36_6.png'>
+    <img id='cb7' class='kd-button colorbutton' src='icons/e36_7.png'>
+    <img id='cb8' class='kd-button colorbutton' src='icons/e36_8.png'>
+    <img id='cb9' class='kd-button colorbutton' src='icons/e36_9.png'>
+    <img id='cb10' class='kd-button colorbutton' src='icons/e36_10.png'>
+    <img id='cb11' class='kd-button colorbutton' src='icons/e36_11.png'>
+  </div>
+  <input type='text' id='grouptitle'>
+  <div id='tabs-list'>
+  </div>
+</div>
+<div id='windows-container'>
+  <div id='windows-list'>
+  </div>
+</div>
+
+  <!-- precache icons -->
+  <div style='display:none'>
+    <img id='c16_0' src='icons/c16_0.png'>
+    <img id='c16_1' src='icons/c16_1.png'>
+    <img id='c16_2' src='icons/c16_2.png'>
+    <img id='c16_3' src='icons/c16_3.png'>
+    <img id='c16_4' src='icons/c16_4.png'>
+    <img id='c16_5' src='icons/c16_5.png'>
+    <img id='c16_6' src='icons/c16_6.png'>
+    <img id='c16_7' src='icons/c16_7.png'>
+    <img id='c16_8' src='icons/c16_8.png'>
+    <img id='c16_9' src='icons/c16_9.png'>
+    <img id='c16_10' src='icons/c16_10.png'>
+    <img id='c16_11' src='icons/c16_11.png'>
+    <img id='e16_0' src='icons/e16_0.png'>
+    <img id='e16_1' src='icons/e16_1.png'>
+    <img id='e16_2' src='icons/e16_2.png'>
+    <img id='e16_3' src='icons/e16_3.png'>
+    <img id='e16_4' src='icons/e16_4.png'>
+    <img id='e16_5' src='icons/e16_5.png'>
+    <img id='e16_6' src='icons/e16_6.png'>
+    <img id='e16_7' src='icons/e16_7.png'>
+    <img id='e16_8' src='icons/e16_8.png'>
+    <img id='e16_9' src='icons/e16_9.png'>
+    <img id='e16_10' src='icons/e16_10.png'>
+    <img id='e16_11' src='icons/e16_11.png'>
+    <img id='e19_0' src='icons/e19_0.png'>
+    <img id='e19_1' src='icons/e19_1.png'>
+    <img id='e19_2' src='icons/e19_2.png'>
+    <img id='e19_3' src='icons/e19_3.png'>
+    <img id='e19_4' src='icons/e19_4.png'>
+    <img id='e19_5' src='icons/e19_5.png'>
+    <img id='e19_6' src='icons/e19_6.png'>
+    <img id='e19_7' src='icons/e19_7.png'>
+    <img id='e19_8' src='icons/e19_8.png'>
+    <img id='e19_9' src='icons/e19_9.png'>
+    <img id='e19_10' src='icons/e19_10.png'>
+    <img id='e19_11' src='icons/e19_11.png'>
+    <img id='blank-image' src='images/blank.png'>
+    <canvas id='canvas' style='width: 19px; height: 19px;'></canvas>
+  </div>
+</body>
+
+<script src='js/grouptemplate.js'></script>
+</html>
